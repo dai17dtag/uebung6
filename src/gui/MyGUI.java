@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyGUI extends Frame
@@ -116,9 +117,18 @@ public class MyGUI extends Frame
     public MyGUI(final List<String> blacklist)
     {
         setTitle("Uebung 6");
-
         setSize(800, 600);
         setLayout(null);
+
+        final List<String> blacklistConst;
+        if (blacklist == null)
+        {
+            blacklistConst = new ArrayList<>();
+        }
+        else
+        {
+            blacklistConst = blacklist;
+        }
 
         final TextArea TXTAREA = new TextArea();
         TXTAREA.setName("TXTAREA");
@@ -184,21 +194,20 @@ public class MyGUI extends Frame
             @Override
             public void actionPerformed(ActionEvent actionEvent)
             {
-                String text = TXTAREA.getText().toLowerCase();
+                String text = TXTAREA.getText();
 
-                if (blacklist != null)
+                for (String reference : blacklistConst)
                 {
-                    for (String reference : blacklist)
+                    char[] textArr = new char[reference.length()];
+                    for (int i = 0; i < textArr.length; i++)
                     {
-                        StringBuilder sb = new StringBuilder();
-                        for (int i = 0; i < reference.length(); i++)
-                        {
-                            sb.append('x');
-                        }
-
-                        text.replace(reference.toLowerCase(), sb.toString());
+                        textArr[i] = 'x';
                     }
+
+                    text = text.replaceAll("(?i)"+reference, new String(textArr));
                 }
+
+                TXTAREA.setText(text);
             }
         });
 
